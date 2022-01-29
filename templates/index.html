@@ -4,15 +4,16 @@
   <link href={{ url_for('static', filename='css/app.css') }} rel="stylesheet" type="text/css">
 </head>
 <body>
-  <h1>Welcome to fill in the blanks</h1>
-  <p>Try out these problems</p>
-  <ol>
-    <li><a href="{{url_for('answer', uid='setA')}}">set A</a></li>
-    <li><a href="{{url_for('answer', uid='setB')}}">set B</a></li>
-    <li><a href="{{url_for('answer', uid='setC')}}">set C</a></li>
-    <li><a href="{{url_for('answer', uid='setD')}}">set D</a></li>
-    <li><a href="{{url_for('answer', uid='setE')}}">set E</a></li>
-  </ol>
-
+  <div class="container">
+    <h1>Welcome to fill in the blanks</h1>
+    <p>Try out these problems</p>
+    <ol>
+      <li><a href="{{url_for('answer', uid='setA')}}">set A</a></li>
+      <li><a href="{{url_for('answer', uid='setB')}}">set B</a></li>
+      <li><a href="{{url_for('answer', uid='setC')}}">set C</a></li>
+      <li><a href="{{url_for('answer', uid='setD')}}">set D</a></li>
+      <li><a href="{{url_for('answer', uid='setE')}}">set E</a></li>
+    </ol>
+  </div>
 </body>
 <html>
