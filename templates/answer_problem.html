@@ -1,0 +1,36 @@
+<html>
+<head>
+  <title>fill in the blanks!</title>
+  <link href={{ url_for('static', filename='css/app.css') }} rel="stylesheet" type="text/css">
+</head>
+
+<body>
+  <div class="container">
+    <h1>Fill in the blanks</h1>
+    <div id="blanks-div" class="blanks-container">
+      <!-- {{pset}} -->
+      {% if not pset %}
+        <p>Invald problem id provided</p>
+      {% else %}
+
+        {% for problem in pset %}
+        <div class="problem">
+          <!-- <p>{{problem}}</p> -->
+          <p>
+          {%for part in problem%}
+            {% if part.type=="text" %}
+              {{part.text}}
+            {% elif part.type=="fillin" %}
+              <input type="text"class="fillin" data={{part.text}}>
+            {% endif %}
+          {% endfor %}
+          </p>
+        </div>
+        {% endfor %}
+
+      {% endif %}
+    </div>
+  </div>
+<script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+<html>
