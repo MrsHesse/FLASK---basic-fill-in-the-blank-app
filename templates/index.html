@@ -6,14 +6,19 @@
 <body>
   <div class="container">
     <h1>Welcome to fill in the blanks</h1>
-    <p>Try out these problems</p>
-    <ol>
-      <li><a href="{{url_for('answer', uid='setA')}}">set A</a></li>
-      <li><a href="{{url_for('answer', uid='setB')}}">set B</a></li>
-      <li><a href="{{url_for('answer', uid='setC')}}">set C</a></li>
-      <li><a href="{{url_for('answer', uid='setD')}}">set D</a></li>
-      <li><a href="{{url_for('answer', uid='setE')}}">set E</a></li>
-    </ol>
+    <h2>Create a problem</h2>
+    <ul>
+      <a href="{{url_for('enter')}}">click here to create your own fill in the blank problem.</a>
+    </ul>
+    {% if uids %}
+      <h2>Try out these problems</h2>
+      <ol>
+        {% for uid in uids %}
+        <li><a href="{{url_for('answer', uid=uid)}}">{{uid}}</a></li>
+        {% endfor %}
+
+      </ol>
+    {% endif %}
   </div>
 </body>
 <html>

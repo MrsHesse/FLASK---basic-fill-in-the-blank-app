@@ -32,7 +32,7 @@ body{
   font-family:'Courier New', Courier, monospace;
   font-weight: bold;
   border-radius:5px;
-  background-color:lightblue;
+  background-color:white;
   font-size:inherit;
   
 }
@@ -65,4 +65,11 @@ textarea
 .feedback{
   font-size:75%;
   font-style:italic;
+}
+
+.problem-container{
+  margin:1rem 0rem 1rem;
+  padding:1rem;
+  background: lightblue;
+  width:auto;
 }

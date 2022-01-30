@@ -100,3 +100,43 @@ Data = {
   "setD" : problemsetD,
   "setE" : problemsetE
 }
+
+import uuid
+
+
+# get the data related to the unique identifier 
+# and create the problem object that can be used
+# to render the problem in html
+
+# this function will be changed to get the data from
+# the database when this is implemented
+def getProblemObj(uid):
+  # get the problem specification object format
+  # for this uid
+
+  pobj = {} 
+  pspec = Data.get(uid)
+  pobj["spec"] = pspec
+  return pobj
+
+
+# this function will be changed to save the data to
+# the database when this is implemented
+def saveProblemObj(pobj):
+
+  # generate a unique id (32char hex string)
+  uid = uuid.uuid4().hex
+
+  Data[uid]=pobj["spec"]
+
+  return uid
+
+def getProblemUids():
+  uids=[]
+  for key in Data:
+    uids.append(key)
+  return uids
+
+
+
+

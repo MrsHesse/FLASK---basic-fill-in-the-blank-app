@@ -18,11 +18,21 @@
       </p>
       {% endif %}
       <p>
-        <input type="submit" name="preview" value="preview">
+        <input type="submit" name="preview" value="see preview">
+        {% if pobj.spec and not pobj.error%}
+          <input type="submit" name="generate" value="generate">
+        {% endif %}
       </p>
     </form>
     <hr>
     <div id="preview-area">
+      {% if pobj.spec %}
+        {% include 'render_problem.html' %}
+      {% endif %}
+    </div>
+<!--
+    <div id="watch-area">
+      <hr>
       {% if pobj.spec %}
         {% for line in pobj.spec %}
           {{line}}<br>
@@ -42,6 +52,7 @@
     </div>
     <pre id="json"></pre>
     </div>
+  -->
   </div>
 
 <script src="{{ url_for('static', filename='js/app.js') }}"></script>

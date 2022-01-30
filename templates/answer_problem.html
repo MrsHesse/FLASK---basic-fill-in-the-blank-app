@@ -7,30 +7,12 @@
 <body>
   <div class="container">
     <h1>Fill in the blanks</h1>
-    <div id="blanks-div" class="blanks-container">
-      <!-- {{pset}} -->
-      {% if not pset %}
-        <p>Invald problem id provided</p>
-      {% else %}
-
-        {% for problem in pset %}
-        <div class="problem">
-          <!-- <p>{{problem}}</p> -->
-          <p>
-          {%for part in problem%}
-            {% if part.type=="text" %}
-              {{part.text}}
-            {% elif part.type=="fillin" %}
-              <input type="text"class="fillin" data={{part.text}}>
-            {% endif %}
-          {% endfor %}
-          </p>
-        </div>
-        {% endfor %}
-
-      {% endif %}
-    </div>
-  
+        {% if pobj.spec %}
+          {% include 'render_problem.html' %}
+        {% else %}
+          <p>Invald problem </p>
+        {% endif %}
+   
     <div>
       {% if previous %}
         <a href="{{url_for('answer', uid=previous)}}">previous</a>
