@@ -55,3 +55,14 @@ body{
    color:#fff;
    background:#c14; 
  }
+
+textarea
+{
+  min-width:400px;
+  min-height:200px;
+}
+
+.feedback{
+  font-size:75%;
+  font-style:italic;
+}

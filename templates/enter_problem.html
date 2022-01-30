@@ -1,0 +1,50 @@
+<html>
+<head>
+  <title>Create a problem</title>
+  <link href={{ url_for('static', filename='css/app.css') }} rel="stylesheet" type="text/css">
+</head>
+<body>
+  <div class="container">
+    <h1>Create a fill in the blanks problem</h1>
+    <div id="blanks-div" class="blanks-container">
+    <p>Enter your problem here</p>
+    <form name="input-form" action="" method="POST">
+        <textarea name="problem-text">{% if pobj.text %}{{pobj.text}} {% endif %}</textarea>
+      {% if pobj.message %}
+      <p class="feedback">
+        {% for line in pobj.message %}
+          {{line}}
+        {% endfor %}
+      </p>
+      {% endif %}
+      <p>
+        <input type="submit" name="preview" value="preview">
+      </p>
+    </form>
+    <hr>
+    <div id="preview-area">
+      {% if pobj.spec %}
+        {% for line in pobj.spec %}
+          {{line}}<br>
+        {% endfor %}
+      {% endif %}
+
+      <hr>
+      <h3>pobj.spec</h3>
+      {{pobj.spec}}
+      <hr>
+      <h3>pobj.text</h3>
+      {{pobj.text}}
+      <hr>
+      <h3>pobj.message</h3>
+      {{pobj.message}}
+      <hr>
+    </div>
+    <pre id="json"></pre>
+    </div>
+  </div>
+
+<script src="{{ url_for('static', filename='js/app.js') }}"></script>
+
+</body>
+<html>
