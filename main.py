@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for
 from problems import processFillinText
 
-from data import getProblemObj, saveProblemObj, getProblemUids
+from data import getProblemObj, saveProblemObj, getProblemUids, flask_create_database
 
 app = Flask('app')
 
@@ -38,6 +38,12 @@ def enter():
         uid = saveProblemObj(pobj)
         return redirect(url_for("answer", uid=uid))
     return render_template('enter_problem.html', pobj = pobj)
+
+
+@app.route('/database/create')
+def create_database():
+  flask_create_database()
+  return("database created")
 
 
 app.run(host='0.0.0.0', port=8080)

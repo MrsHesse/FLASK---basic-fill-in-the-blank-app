@@ -1,25 +1,68 @@
-Flask is a minimal Python framework that helps you create a web server. 
+# Fill in the blank puzzles
+Create puzzles and deliver them to students
 
-Let's take a look at the code we have:
+## Required research
+- [ ] How to log in with google
+  - [potential library to use](https://pythonhosted.org/Flask-GoogleLogin/)
+  - [Tutorial from first principles](https://www.geeksforgeeks.org/oauth-authentication-with-flask-connect-to-google-twitter-and-facebook/)
+  - [very detailed implementation](https://hackingathome.com/2020/04/25/everything-you-need-to-know-about-google-sign-in-for-web-apps/)
+  - [Flask-login](https://hackingathome.com/2020/04/25/everything-you-need-to-know-about-google-sign-in-for-web-apps/)
+- [ ] How to limit page access based on login credentials
+- [ ] returning database records as dictionaies rather than tuples.
+  - [good solution here](https://nickgeorge.net/programming/python-sqlite3-extract-to-dictionary/)
 
-```python
-from flask import Flask
 
-app = Flask(__name__)
+## To do
 
-@app.route("/")
-def hello_world():
-    return "<h1>Hello, World!</h1>"
-```
-	
-What did that code do?
+### website framework
+- [x] Create flask app
+- [ ] Provide login (via google)
+- Separate teacher/admin area 
+  - [ ] Limit access using password
+  - [ ] create and manage puzzles
+  - [ ] assign puzzles to classes
+  - [ ] view/download/link scores
+- Separate puzzle delivery area
+  - [ ] use code to present quiz
+  - [ ] use login details to record score in database
 
-First we `import` the `Flask` class. An instance of this class will be our WSGI application.
+### Create puzzle
+- [x] Page for entering/previewing/generating quiz
+  - [ ] Allow spaces at start of the line
+  - [ ] Allow alternative answers
+  - [ ] Puzzle setting
+- [x] Generated quiz allocated a unique id
+- [ ] Save quiz to database 
 
-Next we create an instance of this class. The first argument is the name of the application’s module or package. `__name__` is a convenient shortcut for this that is appropriate for most cases. This is needed so that Flask knows where to look for resources such as templates and static files.
+### Create Puzzle
+- [x] Page for entering/previewing/generating quiz
+  - [ ] Need to include a title and instructions
+- [ ] Include puzzle setting
+  - [ ] case sensitive or ignore case
+  - [ ] different feedback options (immediate/end/none)
+- [x] Generated quiz allocated a unique id
+- [ ] Save quiz to database 
 
-We then use the `route()` decorator to tell Flask what URL should trigger our function. In this case we use `/` routh, which is the default route of any website.
+### Puzzle management
+- [ ] need a mechanism to view and assign puzzles to students.
+- [ ] need a mechanism to deliver these puzzles to the students
+- [ ] need a mechanism to record the students results when they do the puzzle.
+- [ ] need a mechanism to view/save results for a class and individual students.
+  - may be able to integrate with google classroom.
 
-The function returns the message we want to display in the user’s browser. The default content type is HTML, so HTML in the string will be rendered by the browser.
+### Database
+- [ ] Design database tables
+- Create database
+  - [ ] procedure to create/reset the database
+  - [ ] use a route to run this procedure
+- Create functions/procedures to access the database
 
-To learn more, checkout the [official guide](https://flask.palletsprojects.com/en/2.0.x/quickstart/).
+### 
+
+
+
+
+
+
+
+
