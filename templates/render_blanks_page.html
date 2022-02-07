@@ -9,8 +9,6 @@ spec: [ [ {type:"text", text:"..."}, {type:"fillin", text:"blank words"} ],
 text: "the original specification text entered",
 message: status message, should be an array, one item per line
 -->
-
-  <div class="problem-container">
   {% for line in pobj.spec %}
     <div class="problem-line">
       <p>
@@ -24,5 +22,4 @@ message: status message, should be an array, one item per line
       </p>
     </div>
   {% endfor %}
-  </div>
   

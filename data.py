@@ -77,7 +77,8 @@ def createDatabase():
   schema = """
       CREATE TABLE quizcontent (
         quizuid TEXT,
-        pageuid TEXT
+        pageuid TEXT,
+        seq INTEGER
       );
       """
   conn.execute(schema);
@@ -110,6 +111,7 @@ def addInitialData():
 
   # add page specs into the page table and linke to a quiz
   quizuid="Q34FgTYaL"
+  seq=0
 
   for uid in quiz_spec:
 
@@ -128,8 +130,8 @@ def addInitialData():
         db.execute( "INSERT INTO page (uid, spec) VALUES(?,?)" , (uid, page_spec_json))
 
         # link this page to the quiz in the quizcontent table
-        db.execute( "INSERT INTO quizcontent (quizuid, pageuid) VALUES(?,?)" , (quizuid, uid,) )
-  
+        db.execute( "INSERT INTO quizcontent (quizuid, pageuid, seq) VALUES(?,?,?)" , (quizuid, uid, seq,) )
+        seq+=1
         
       except Exception as e:
         print(f"Error adding {uid} data : {page_spec}")
@@ -194,8 +196,6 @@ def flask_create_database():
 #        spec     : an object holding the details for this page
 #
 def getPage(uid):
-  print("in getPage()")
-  
   sql = f"SELECT * from page WHERE uid='{uid}';"
   #print(f"sql = {sql}")
   dicts = db_getdicts(sql)
@@ -205,8 +205,9 @@ def getPage(uid):
     return None
   
   #db_printdicts(dicts,"matching page dicts")
-
-  return dicts[0]
+  pobj = dicts[0]
+  pobj["spec"] = json.loads( pobj["spec"])
+  return pobj
 
 
 #
@@ -290,6 +291,73 @@ def getPageUids(quiz_uid):
 
   return pageuids
 
+# get the page for a specific quiz and sequence number
+# return the page object
+def getQuizPage(quiz_uid, quiz_seq=0):
+  # search the quizcontent table for all the rows containing that quizid and get the pageid
+
+  # get details about the quiz
+  sql = f'SELECT * FROM quiz WHERE uid = "{quiz_uid}"';
+  dicts = db_getdicts(sql)
+
+  #db_printdicts(dicts, "quiz details")
+  print()
+
+  quiz = None
+  if len(dicts)>0:
+    quiz = dicts[0]
+
+
+  # work out the maximum seq number
+  sql = f'SELECT MAX(seq) FROM quizcontent WHERE quizuid = "{quiz_uid}"';
+  records = db_getrecords(sql)
+
+  #print("sql :", sql)
+  #print("records :", records)
+
+  lastseq = records[0][0]
+  
+
+  # search the page table for all the rows containing that pageid and get the UID
+  sql = ''' SELECT p.*
+            FROM quizcontent AS qc, page AS p
+            WHERE qc.quizuid = "{quiz_uid}"
+            AND   qc.pageuid = p.uid
+            AND   qc.seq = {quiz_seq};
+        '''
+  sql = sql.replace("{quiz_uid}", quiz_uid)
+  sql = sql.replace("{quiz_seq}", str(quiz_seq) )
+
+  #print("in getQuizPage()")
+  #print("sql = ", sql)  
+  dicts = db_getdicts(sql)
+
+  #db_printdicts(dicts, "page at seq position")
+
+  page=None
+  if(len(dicts)>0):  
+    page = dicts[0]
+  
+  quizpage={}
+
+  nav ={}
+  if(quiz_seq>0):
+    nav["prev"]=quiz_seq-1
+  if(quiz_seq<lastseq):
+    nav["next"]=quiz_seq+1
+  if not nav:
+    nav = None
+
+  
+  if quiz and page:
+    quizpage = {  
+      "quiz":quiz,
+      "seq" :quiz_seq,
+      "page":page,
+      "nav" :nav
+    }
+
+  return  quizpage
 
 if __name__== "__main__":
   createDatabase()
@@ -400,3 +468,36 @@ if __name__== "__main__":
   print("return pobj")
   print(pobj)
   print()
+
+
+  print()
+  print("==============================================")
+  print("  testing getQuizPage() with 'Q34FgTYaL'")
+  print("==============================================")
+  
+  pobj = getQuizPage('Q34FgTYaL', 1)
+  print("1.\t", pobj)
+  print()
+
+  pobj = getQuizPage('Q34FgTYaL', 2)
+  print("2.\t", pobj)
+  print()
+
+  pobj = getQuizPage('Q34FgTYaL', 3)
+  print("3.\t", pobj)
+  print()
+  
+  pobj = getQuizPage('Q34FgTYaL', 4)
+  print("4.\t", pobj)
+  print()
+
+  pobj = getQuizPage('Q34FgTYaL', 5)
+  print("5.\t", pobj)
+  print()
+  
+  pobj = getQuizPage('Q34FgTYaL', 0)
+  print("0.\t", pobj)
+  print()
+  
+  
+  
