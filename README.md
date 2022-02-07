@@ -10,6 +10,10 @@ Create puzzles and deliver them to students
 - [ ] How to limit page access based on login credentials
 - [ ] returning database records as dictionaies rather than tuples.
   - [good solution here](https://nickgeorge.net/programming/python-sqlite3-extract-to-dictionary/)
+- Investigate integration with Google classroom
+  - [ ] accessing rosters
+  - [ ] assigning quiz to classes in classroom
+  - [ ] uploading marks to google classroom
 
 
 ## To do

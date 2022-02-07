@@ -1,0 +1,224 @@
+{
+  "setA": [
+    [
+      {
+        "type": "fillin",
+        "text": "Jack"
+      },
+      {
+        "type": "text",
+        "text": " and "
+      },
+      {
+        "type": "fillin",
+        "text": "Jill"
+      },
+      {
+        "type": "text",
+        "text": " went up the hill."
+      }
+    ]
+  ],
+  "setB": [
+    [
+      {
+        "type": "fillin",
+        "text": "Jack"
+      },
+      {
+        "type": "text",
+        "text": " and "
+      },
+      {
+        "type": "fillin",
+        "text": "Jill"
+      },
+      {
+        "type": "text",
+        "text": " went up the hill."
+      }
+    ],
+    [
+      {
+        "type": "text",
+        "text": "Humpty "
+      },
+      {
+        "type": "fillin",
+        "text": "Dumpty"
+      },
+      {
+        "type": "text",
+        "text": " had a great fall."
+      }
+    ]
+  ],
+  "setC": [
+    [
+      {
+        "type": "fillin",
+        "text": "Jack"
+      },
+      {
+        "type": "text",
+        "text": " and "
+      },
+      {
+        "type": "fillin",
+        "text": "Jill"
+      },
+      {
+        "type": "text",
+        "text": " went up the hill."
+      }
+    ],
+    [
+      {
+        "type": "text",
+        "text": "Humpty "
+      },
+      {
+        "type": "fillin",
+        "text": "Dumpty"
+      },
+      {
+        "type": "text",
+        "text": " had a great fall."
+      }
+    ],
+    [
+      {
+        "type": "text",
+        "text": "3 x 4 = "
+      },
+      {
+        "type": "fillin",
+        "text": "12"
+      }
+    ]
+  ],
+  "setD": [
+    [
+      {
+        "type": "text",
+        "text": "Humpty "
+      },
+      {
+        "type": "fillin",
+        "text": "Dumpty"
+      },
+      {
+        "type": "text",
+        "text": " had a great fall."
+      }
+    ],
+    [
+      {
+        "type": "text",
+        "text": "3 x 4 = "
+      },
+      {
+        "type": "fillin",
+        "text": "12"
+      }
+    ]
+  ],
+  "setE": [
+    [
+      {
+        "type": "text",
+        "text": "< "
+      },
+      {
+        "type": "fillin",
+        "text": "title"
+      },
+      {
+        "type": "text",
+        "text": " > This text appears in the window tab < "
+      },
+      {
+        "type": "fillin",
+        "text": "/title"
+      },
+      {
+        "type": "text",
+        "text": " >"
+      }
+    ],
+    [
+      {
+        "type": "text",
+        "text": "< "
+      },
+      {
+        "type": "fillin",
+        "text": "h1"
+      },
+      {
+        "type": "text",
+        "text": " > This text appears as the most important heading < "
+      },
+      {
+        "type": "fillin",
+        "text": "/h1"
+      },
+      {
+        "type": "text",
+        "text": " >"
+      }
+    ],
+    [
+      {
+        "type": "text",
+        "text": "< "
+      },
+      {
+        "type": "fillin",
+        "text": "b"
+      },
+      {
+        "type": "text",
+        "text": " > This text is bold < "
+      },
+      {
+        "type": "fillin",
+        "text": "/b"
+      },
+      {
+        "type": "text",
+        "text": " >"
+      }
+    ],
+    [
+      {
+        "type": "text",
+        "text": "< b > < "
+      },
+      {
+        "type": "fillin",
+        "text": "i"
+      },
+      {
+        "type": "text",
+        "text": " > This text is bold and italic < "
+      },
+      {
+        "type": "fillin",
+        "text": "/i"
+      },
+      {
+        "type": "text",
+        "text": " > < "
+      },
+      {
+        "type": "fillin",
+        "text": "/b"
+      },
+      {
+        "type": "text",
+        "text": " >"
+      }
+    ]
+  ]
+}

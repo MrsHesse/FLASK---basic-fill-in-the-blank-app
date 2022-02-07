@@ -1,207 +1,16 @@
-'''
-This file is used to hold the test data for the fillin specs.abs
 
-Once working this file can be replaced with a version that uses a
-database.
-'''
+from datautils import db_setname, db_connect, db_cursor, db_tables, db_print_table, db_table_exists, db_getrecords, db_getrecord, db_getdicts, db_printrecords, db_printdicts, db_isuniquevalue, db_getunique
 
-'''
-problem  - is an individual string/paragraphcontaining blanks items.
-problemset - is an array of problem items
-Data - a dictionary linking each problemset with a unique id
-'''
-
-problem1 = [
-  {"type":"fillin", "text":"Jack"},
-  {"type":"text", "text":" and "},
-  {"type":"fillin", "text":"Jill"},
-  {"type":"text", "text":" went up the hill."}
-]
-
-problem2 = [
-  {"type":"text", "text":"Humpty "},
-  {"type":"fillin", "text":"Dumpty"},
-  {"type":"text", "text":" had a great fall."}
-]
-
-problem3 = [
-  {"type":"text", "text":"3 x 4 = "},
-  {"type":"fillin", "text":"12"}
-]
-
-problem4 = [
-  {"type":"text", "text":"< "},
-  {"type":"fillin", "text":"title"},
-  {"type":"text", "text":" > This text appears in the window tab < "},
-  {"type":"fillin", "text":"/title"},
-  {"type":"text", "text":" >"},
-]
-
-problem5 = [
-  {"type":"text", "text":"< "},
-  {"type":"fillin", "text":"h1"},
-  {"type":"text", "text":" > This text appears as the most important heading < "},
-  {"type":"fillin", "text":"/h1"},
-  {"type":"text", "text":" >"},
-]
-
-problem6 = [
-  {"type":"text", "text":"< "},
-  {"type":"fillin", "text":"b"},
-  {"type":"text", "text":" > This text is bold < "},
-  {"type":"fillin", "text":"/b"},
-  {"type":"text", "text":" >"},
-]
-
-
-problem7 = [
-  {"type":"text", "text":"< b > < "},
-  {"type":"fillin", "text":"i"},
-  {"type":"text", "text":" > This text is bold and italic < "},
-  {"type":"fillin", "text":"/i"},
-  {"type":"text", "text":" > < "},
-  {"type":"fillin", "text":"/b"},
-  {"type":"text", "text":" >"},
-]
-
-
-problemsetA = [
-  problem1
-]
-
-problemsetB = [
-  problem1,
-  problem2
-]
-
-problemsetC = [
-  problem1,
-  problem2,
-  problem3
-]
-
-problemsetD = [
-  problem2,
-  problem3
-]
-
-problemsetE = [
-  problem4,
-  problem5,
-  problem6,
-  problem7,
-  
-]
-
-Data = {
-  "setA" : problemsetA,
-  "setB" : problemsetB,
-  "setC" : problemsetC,
-  "setD" : problemsetD,
-  "setE" : problemsetE
-}
-
-
-
-''' 
-Functions for creating and managing the underlying database
-'''
-import sqlite3
 import json
 
-DB = "problems.db"
+
+db_setname("problems.db")
+
 
 '''
-Utility data functions
+This file is used to access and manage the databases used in the app
+
 '''
-
-def db_connect():
-  try:
-    db = sqlite3.connect(DB)
-  except Exception as e:
-    print(f"Error opening {DB} : {e}")
-    db=None
-  return db
-
-  
-
-def db_cursor(db):
-    return db.cursor()
-
-
-def db_tables(db=None):
-  if not db:
-    db=db_connect()
-  if not db:
-    return None
-  try:
-      cursor = db_cursor(db)
-  except:
-      print("db_tables: error creating cursor")
-      return None
-
-  try:
-      sql =   """
-              SELECT name FROM sqlite_master WHERE type='table';
-              """
-      sql =   """
-              SELECT name FROM sqlite_master ;
-              """
-
-      cursor.execute(sql)
-      print(cursor.fetchall())
-
-  except:
-      print("Error checking names")
-      return None
-  return cursor
-
-def db_table_exists(db, tablename):
-    try:
-        cursor = db_cursor(db)
-        sql =   "SELECT name FROM sqlite_master WHERE type='table' AND name = ?"
-        cursor.execute(sql, (tablename,))
-        return len(cursor.fetchall())>0
-
-    except:
-        print("Error checking names")
-        return None
-    return None
-
-def db_print_table(db, tablename):
-
-    try:
-        cursor = db_cursor(db)
-        sql =   "SELECT * FROM "+tablename+";"
-        cursor.execute(sql)
-
-        rows = cursor.fetchall()
-        print()
-        print(tablename)
-        print("----------------------------")
-        if len(rows)>0:
-            for row in rows:
-                print(row)
-        else :
-            print("No records in ", tablename)
-            
-
-    except Exception as e:
-        print("Error printing",tablename,":", e)
-
-
-def db_getrecords(select_query):
-    """Returns data from an SQL query as a list of dicts."""
-    records = None
-    try:
-        con = db_connect()
-        records = con.execute(select_query).fetchall()
-        
-    except Exception as e:
-        print(f"Failed to execute query: {select_query}\n with error:\n{e}")
-        
-    con.close()
-    return records
 
 '''
 functions for creating the database and tables for this project 
@@ -227,38 +36,111 @@ def createDatabase():
       """
   conn.execute(user_schema);
   print("created user table")
-  
-  # create problem specs table
-  if db_table_exists(conn, "specs"):
-    conn.execute('DROP TABLE specs;')
-  
-  specs_schema = """
-      CREATE TABLE specs(
-        id INTEGER PRIMARY KEY,
+
+  # create quiz table
+  if db_table_exists(conn, "quiz"):
+    conn.execute('DROP TABLE quiz;')
+
+  schema = """
+      CREATE TABLE quiz (
+        quizid INTEGER PRIMARY KEY,
         uid TEXT,
-        spec text
+        title TEXT,
+        details text
       );
       """
-  conn.execute(specs_schema);
-  print("created problem-specs table")
+  conn.execute(schema);
+  print("created quiz table")
+
+
+  # create page table
+  if db_table_exists(conn, "page"):
+    conn.execute('DROP TABLE page;')
+
+  schema = """
+      CREATE TABLE page (
+        pageid INTEGER PRIMARY KEY,
+        uid TEXT,
+        title TEXT,
+        details text,
+        spec TEXT
+      );
+      """
+  conn.execute(schema);
+  print("created page table")
+
+
+  # create quizcontent table
+  if db_table_exists(conn, "quizcontent"):
+    conn.execute('DROP TABLE quizcontent;')
+
+  schema = """
+      CREATE TABLE quizcontent (
+        quizuid TEXT,
+        pageuid TEXT
+      );
+      """
+  conn.execute(schema);
+  print("created quiz quizcontent")
+  
+
+  # create user table
+  if db_table_exists(conn, "user"):
+    conn.execute('DROP TABLE user;')
+
+  schema = """
+      CREATE TABLE user (
+        name TEXT,
+        password TEXT
+      );
+      """
+  conn.execute(schema);
+  print("created quiz quizcontent")
   
   conn.commit()
   conn.close()
-  print("created problem-specs table")
+  print("new tables created and commited")
 
 def addInitialData():
   db = db_connect()
 
-  # add initial data to the specs database
-  for key in Data:
-      # convert the item into json format
-      jsonspec = json.dumps(Data[key])
+  fin = open("startproblems.json","r")
+  quiz_spec = json.load(fin)
+  fin.close()
 
+  # add page specs into the page table and linke to a quiz
+  quizuid="Q34FgTYaL"
+
+  for uid in quiz_spec:
+
+      # convert the item into json format
+      page_spec = quiz_spec[uid]
+      page_spec_json = json.dumps(page_spec)
+      print()
+      print("===========================================================")
+      print("uid -", uid)
+      print("spec -", page_spec_json)
+      print("===========================================================")
+      print()
       try:
-        db.execute( "INSERT INTO specs (uid, spec) VALUES(?,?)" , (key, jsonspec))
+
+        # add page into the page table''
+        db.execute( "INSERT INTO page (uid, spec) VALUES(?,?)" , (uid, page_spec_json))
+
+        # link this page to the quiz in the quizcontent table
+        db.execute( "INSERT INTO quizcontent (quizuid, pageuid) VALUES(?,?)" , (quizuid, uid,) )
+  
+        
       except Exception as e:
-        print(f"Error adding {key} data : {jsonspec}")
+        print(f"Error adding {uid} data : {page_spec}")
         print(f"Exception is {e}")
+
+  # add the quiz into the quiz table
+  db.execute( "INSERT INTO quiz (quizid, uid, title, details) VALUES(?,?,?,?)" , 
+                     (1, quizuid, "Test quiz", "Fill in all the blanks",))
+    
+  
+  db.commit()
 
 
   # add some users to the user database
@@ -272,7 +154,7 @@ def addInitialData():
   print("adding users to users table")
   try:      
     db.executemany( 
-      "INSERT INTO users (name, password) VALUES(?,?);" , 
+      "INSERT INTO user (name, password) VALUES(?,?);" , 
       users)
     
     
@@ -282,6 +164,7 @@ def addInitialData():
   db.commit()  # commit after ever addition
   print("users added to users table")
   print()
+  db.close()
 
 def flask_create_database():
   # this is called from a flask route to ensure the database
@@ -296,60 +179,116 @@ def flask_create_database():
 # from the specs database and 
 # and create the problem object that can be used
 # to render the problem in html
-import uuid
 
-
-# this function will be changed to get the data from
-# the database when this is implemented
-def getProblemObj(uid):
-  # get the problem specification object format
-  # for this uid
-
-  print("in getProblemObj()")
-  sql = f"SELECT spec from specs WHERE uid='{uid}'"
-  print(f"sql = {sql}")
-  records = db_getrecords(sql)
-  print(f"records = {records}")
+#
+# this function will 
+# 1. search the page table for a record with the specified uid 
+#    as a dictionary
+# 2. convert the specification from json format to a dictionary
+# 3. return the resulting page object
+#  
+# The page object is a dictionary representation of page table record i.e
+#        uid      : is generated
+#        title    : string containing the title for the page
+#        details  : string containing the details or instructions
+#        spec     : an object holding the details for this page
+#
+def getPage(uid):
+  print("in getPage()")
   
-  pobj = None
-  if len(records)>0:
-    pobj = {} 
-    pspec = json.loads(records[0][0])
-    print(f"json - {records[0][0]} ")
-    print(f"dict - {pspec} ")
-    pobj["spec"] = pspec
-  return pobj
+  sql = f"SELECT * from page WHERE uid='{uid}';"
+  #print(f"sql = {sql}")
+  dicts = db_getdicts(sql)
+  
+  if not dicts:
+    print(f"Error getPage() - no record in page matching uid {uid}")
+    return None
+  
+  #db_printdicts(dicts,"matching page dicts")
+
+  return dicts[0]
 
 
-# this function will be changed to save the data to
-# the database when this is implemented
-def saveProblemObj(pobj):
+#
+# this function will 
+# 1. generate a uid for this page
+# 2. save the page to the page table.
+#  
+# The page object is a dictionary representation of page table record i.e
+#   
+#        title    : string containing the title for the page
+#        details  : string containing the details or instructions
+#        spec     : an object holding the details for this page
+#
+#  within this function
+#       uid       : is generated
+#       soec      : is converted into json format
+#
+#  the details can then be inserted as a new record into the page table.
+#
+def savePage(pobj):
+  print()
+  print("in savePage()")
+  for key in pobj:
+    print("\t", key,":",pobj[key])
+  print()
 
+  if not pobj:
+    print("Error savePage() - no page object provided")
+    return None;
+
+  if not pobj.get("spec"):
+    print("Error savePage() - no page specification object provided")
+    return None;
+  
   # generate a unique id (32char hex string)
-  uid = uuid.uuid4().hex
+  pobj["uid"] = db_getunique("page", "uid")
 
-  Data[uid]=pobj["spec"]
+  print()
+  print("converting : ", pobj["spec"])
+  print()
+  
+  # convert the spec to json
+  pobj["jspec"] = json.dumps(pobj["spec"])
 
-  jsonspec = json.dumps(pobj["spec"])
-
+  pobj["title"]   = pobj.get("title", "")
+  pobj["detail"] = pobj.get("details", "")
+  
   try:
     db = db_connect()
-    db.execute( "INSERT INTO specs (uid, spec) VALUES(?,?)" , (uid, jsonspec,))
+    db.execute( "INSERT INTO page (uid, title, details, spec) VALUES(?,?,?,?)" , 
+                  (pobj["uid"], pobj["title"], pobj["detail"], pobj["jspec"], ))
     db.commit()  
     db.close()
-    print(f"{uid} added successfully")
+    print(f'{pobj["uid"]} added successfully')
     
   except Exception as e:
-    print(f"Error adding {uid} data : {jsonspec}")
+    print(f"Error adding {pobj['uid']} data : {pobj['jspec']}")
     print(f"Exception is {e}")
 
-  return uid
+  return pobj["uid"]
 
-def getProblemUids():
-  uids=[]
-  for key in Data:
-    uids.append(key)
-  return uids
+
+
+# get the uids for all the pages linked to a particular quiz uid
+# return a list of the matching page uids
+def getPageUids(quiz_uid):
+  # search the quizcontent table for all the rows containing that quizid and get the pageid
+
+  # search the page table for all the rows containing that pageid and get the UID
+  sql = ''' SELECT qc.quizuid, p.uid AS pageuid
+            FROM quizcontent AS qc, page AS p
+            WHERE qc.quizuid = "{quiz_uid}"
+            AND   qc.pageuid = p.uid;
+        '''
+  sql = sql.replace("{quiz_uid}", quiz_uid)
+  
+  dicts = db_getdicts(sql)
+  
+  # get the "pageuid" value from each dictionary and put into an array
+  pageuids = [ x['pageuid'] for x in dicts] 
+
+  return pageuids
 
 
 if __name__== "__main__":
@@ -358,7 +297,106 @@ if __name__== "__main__":
   addInitialData()
 
   db=db_connect()
-  db_print_table(db, "specs")
-  db_print_table(db, "users")
+  db_print_table(db, "quiz")
+  db_print_table(db, "quizcontent")
+  db_print_table(db, "page")
+  db_print_table(db, "user")
   db.close()
+
+  print("==============================================")
+  print("= testing getPageUids() with existing quiz uid")
+  print("==============================================")
+  pageuids = getPageUids("Q34FgTYaL")
+  print("Q34FgTYaL :", pageuids)
+  print()
+
+  print("==============================================")
+  print("= testing getPageUids() with a nonexistant quiz uid")
+  print("==============================================")
+  pageuids = getPageUids("THISDOESNOTEXIST")
+  print("THISDOESNOTEXIST :", pageuids)
+  print()
+
+  print("==============================================")
+  print("= testing db_isuniquevalue() ")
+  print("= with quiz,uid, 'Q34FgTYaL' -> False ")
+  print("= with quiz,uid, 'THISDOESNOTEXIST' -> True ")
+  print("==============================================")
+  print("Q34FgTYaL :", db_isuniquevalue("quiz", "uid", 'Q34FgTYaL') )
+  print("THISDOESNOTEXIST :", db_isuniquevalue("quiz", "uid", 'THISDOESNOTEXIST') )
+  print()
+
   
+  print("==============================================")
+  print("= testing db_isuniquevalue() ")
+  print("= with page,uid, 'SetD' -> False ")
+  print("= with page,uid, 'SetE' -> False ")
+  print("= with page,uid, 'ABCdefGHI' -> True ")
+  print("==============================================")
+  print("setD :", db_isuniquevalue("page", "uid", 'setD') )
+  print("setE :", db_isuniquevalue("page", "uid", 'setE') )
+  print("ABCdefGHI :", db_isuniquevalue("page", "uid", 'ABCdefGHI') )
+  print()
+
+  print("==============================================")
+  print("= testing db_getunique() ")
+  print("==============================================")
+  print("page and uid :", db_getunique("page", "uid") )
+  print("page and uid :", db_getunique("page", "uid") )
+  print("page and uid :", db_getunique("page", "uid") )
+  print()
+  print("quiz and uid :", db_getunique("quiz", "uid") )
+  print("quiz and uid :", db_getunique("quiz", "uid") )
+  print("quiz and uid :", db_getunique("quiz", "uid") )
+  print()
+
+  print("==============================================")
+  print("  testing savePage() - should not produce errors ")
+  print("==============================================")
+  pobj1 = {
+    "title"   :"test title 1",
+    "details" :"test details 1",
+    "spec"    :[[ 
+                {"type":"text", "text":"Hello "}, 
+                {"type":"fillin", "text":"world"}, 
+                {"type":"text", "text":" !"} 
+          ]]
+  }
+  print()
+  print("page table - before saving page")
+  db=db_connect()
+  db_print_table(db, "page")
+  db.close()
+
+  print("call returns :", savePage(pobj1) )
+  print()
+  print("page table - after saving page")
+  db=db_connect()
+  db_print_table(db, "page")
+  db.close()
+
+
+  print()
+  print("==============================================")
+  print("  testing getPage() with 'setC'")
+  print("      - should return validobject ")
+  print("      - should not produce errors ")
+  print("==============================================")
+  pobj = getPage("setC")
+
+  print("return pobj")
+  print(pobj["uid"])
+  print(pobj)
+  print()
+
+  print()
+  print("==============================================")
+  print("  testing getPage() with 'setX'")
+  print("      - should return Null ")
+  print("      - should produce errors ")
+  print("==============================================")
+  pobj = getPage("setX")
+
+  print("return pobj")
+  print(pobj)
+  print()
