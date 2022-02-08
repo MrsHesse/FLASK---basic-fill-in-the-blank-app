@@ -71,7 +71,7 @@ def getquiz():
 @app.route('/answer/<uid>')
 def answer(uid):
     pobj = getPage(uid)
-    return render_template('answer_page.html', pobj=pobj)
+    return render_template('answer_page.html', pobj=pobj, feedback="page")
 
 @app.route('/enter', methods=["GET", "POST"])
 def enter():

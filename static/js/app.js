@@ -8,39 +8,67 @@ const fillin_elems = document.querySelectorAll(".fillin");
 fillin_elems.forEach(item => {
   var wordlen = item.getAttribute("data").length;
   item.style.width = (wordlen+2) +"ch";
-  item.addEventListener('change', checkAnswer);
+
+  if ( !feedback || feedback=="immediate"){
+    item.addEventListener('change', function(){ checkAnswer(this); });
+  }
   item.addEventListener('keydown', processFillin);
 })
+
+const feedbackbutton = document.getElementById("feedback");
+if (feedbackbutton){
+  feedbackbutton.addEventListener('click', pageFeedback);
+}
+
 
 fillin_elems[0].focus();
 
 
-// e is the element
-function checkAnswer(){
+function checkAnswer(elem){
   // get the answer
-  const attempt = this.value.toLowerCase();
-  const correctanswer = this.getAttribute('data').toLowerCase()
+  const attempt = elem.value.toLowerCase();
+  const correctanswer = elem.getAttribute('data').toLowerCase()
 
   console.log("checkAnswer()");
   console.log("ending fillin");
 
-  this.classList.remove("fillin-started");  
+  elem.classList.remove("fillin-started");  
   
   if (attempt===""){
-    this.classList.remove("wrong");
-    this.classList.remove("correct");
+    elem.classList.remove("wrong");
+    elem.classList.remove("correct");
     return;
   }  
 
   if (attempt==correctanswer){
-    this.classList.remove("wrong");
-    this.classList.add("correct");
+    elem.classList.remove("wrong");
+    elem.classList.add("correct");
   } else {
-    this.classList.remove("correct");
-    this.classList.add("wrong");
+    elem.classList.remove("correct");
+    elem.classList.add("wrong");
   }
 
+  return elem.classList.contains("correct")
 }
+
+// executed when the feedback button is pressed
+function pageFeedback(){
+  
+  var score=0;
+  var count=0;
+
+  console.log("")
+  console.log("in pageFeedback()")
+  
+  fillin_elems.forEach( item => {
+    if (checkAnswer(item))  score++;
+    console.log(count, score)
+  })
+  console.log("page score =", score)
+
+  return score;
+}
+
 
 // when focus returns to the fillin
 // set to blank and remove correct or wrong classes
