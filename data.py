@@ -296,6 +296,8 @@ def getPageUids(quiz_uid):
 def getQuizPage(quiz_uid, quiz_seq=0):
   # search the quizcontent table for all the rows containing that quizid and get the pageid
 
+  quiz_seq = int(quiz_seq)
+  
   # get details about the quiz
   sql = f'SELECT * FROM quiz WHERE uid = "{quiz_uid}"';
   dicts = db_getdicts(sql)
@@ -332,19 +334,23 @@ def getQuizPage(quiz_uid, quiz_seq=0):
   #print("sql = ", sql)  
   dicts = db_getdicts(sql)
 
+
   #db_printdicts(dicts, "page at seq position")
 
   page=None
   if(len(dicts)>0):  
     page = dicts[0]
+
+    # the page spec needs to be converted into a dictionary from json
+    page["spec"] = json.loads(page["spec"])
   
   quizpage={}
 
   nav ={}
   if(quiz_seq>0):
-    nav["prev"]=quiz_seq-1
+    nav["prev"]={ "uid":quiz_uid, "seq":quiz_seq-1}
   if(quiz_seq<lastseq):
-    nav["next"]=quiz_seq+1
+    nav["next"]={ "uid":quiz_uid, "seq":quiz_seq+1}
   if not nav:
     nav = None
 

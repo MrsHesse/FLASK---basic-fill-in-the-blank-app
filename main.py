@@ -1,8 +1,8 @@
 from flask import Flask, render_template, request, redirect, url_for
 from problems import processFillinText
 
-from data import getPage, savePage, getPageUids, flask_create_database
-from datautils import db_isuniquevalue
+from data import getPage, savePage, getPageUids, flask_create_database,getQuizPage
+from datautils import db_isuniquevalue, db_printdicts
 
 app = Flask('app')
 
@@ -15,13 +15,31 @@ def index():
 
 @app.route('/quiz')
 def quiz():
-    
+    print("in quiz()")
+    print("args -", request.args)
+
     uid = request.args.get("uid")
     seq = request.args.get("seq",0)
 
+    if not uid:
+      print("\tno uid specified so redirecting to getquiz page ")
+      return redirect(url_for("getquiz"))
+    
+    quiz = getQuizPage(uid, seq)
+
+    print("page")
+    db_printdicts(quiz["page"])
+
+    print("page spec")
+    db_printdicts(quiz["page"]["spec"])
+
+    print("nav")
+    print("prev :", quiz["nav"].get("prev"))
+    print("next :", quiz["nav"].get("next"))
+    
 
     #pobj = getPage(uid)
-    return render_template('answer_page.html', pobj=pobj)
+    return render_template('answer_page.html', pobj=quiz["page"], nav=quiz["nav"])
     
 
 @app.route('/getquiz', methods=["GET", "POST"])

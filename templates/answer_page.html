@@ -27,18 +27,16 @@
           <p>Invald question page</p>
         {% endif %}
    
-      <div>
-          {% if previous %}
-            <a href="{{url_for('answer', uid=previous)}}">previous</a>
-          {% else %}
-            <a href="{{url_for('index')}}">previous</a>
-          {% endif %}  
-          {% if next %}
-            <a href="{{url_for('answer', uid=next)}}">next</a>
-          {% else %}
-            <a href="{{url_for('index')}}">next</a>
-          {% endif %}  
-      </div>
+      {% if nav %}
+        <div>
+            {% if nav.prev %}
+              <a href="{{url_for('quiz', uid=nav.prev.uid, seq=nav.prev.seq)}}">previous</a>
+            {% endif %}  
+            {% if nav.next %}
+              <a href="{{url_for('quiz', uid=nav.next.uid, seq=nav.next.seq)}}">next</a>
+            {% endif %}  
+        </div>
+        {% endif %}
 
   </div>
 
